@@ -58,7 +58,7 @@ pipeline {
              script {      
               try {
                     sh 'docker save michaelbraunbass/vulnerablewebapp -o vwa.tar' 
-                    sh './shiftleft image-scan -i ./vwa.tar'
+                    sh './shiftleft image-scan -i ./vwa.tar -t 1800'
               }    catch (Exception e) {
     
                  echo "Request for Approval"  
@@ -73,8 +73,14 @@ pipeline {
                def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
               }
             }
+<<<<<<< HEAD
           }   
      stage('Deploy App to Dockerhub') {
+=======
+          }  
+        
+   stage('Deploy App to Dockerhub') {
+>>>>>>> eab8296b565bfc00238950f4320bb2bacfa02b32
      
            steps {
              script {
@@ -82,7 +88,12 @@ pipeline {
                          app.push("latest")
               }
             }
+<<<<<<< HEAD
           }              
      }
+=======
+          }          
+        
+>>>>>>> eab8296b565bfc00238950f4320bb2bacfa02b32
   }
 }
