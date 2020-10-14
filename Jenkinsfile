@@ -73,14 +73,8 @@ pipeline {
                def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
               }
             }
-<<<<<<< HEAD
           }   
      stage('Deploy App to Dockerhub') {
-=======
-          }  
-        
-   stage('Deploy App to Dockerhub') {
->>>>>>> eab8296b565bfc00238950f4320bb2bacfa02b32
      
            steps {
              script {
@@ -88,12 +82,7 @@ pipeline {
                          app.push("latest")
               }
             }
-<<<<<<< HEAD
           }              
      }
-=======
-          }          
-        
->>>>>>> eab8296b565bfc00238950f4320bb2bacfa02b32
   }
 }
