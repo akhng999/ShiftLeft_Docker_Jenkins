@@ -1,0 +1,34 @@
+<style>
+body {background-color: black;}
+h1 {font-size:30px;font-weight:300;font-weight:normal;font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;color:#b5e853;letter-spacing:-0.03em;text-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 5px rgba(181,232,83,0.1),0 0 10px rgba(181,232,83,0.1)}
+p {font-weight:normal;font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;color:#b5e853;letter-spacing:-0.03em;text-shadow:0 1px 1px rgba(0,0,0,0.1),0 0 5px rgba(181,232,83,0.1),0 0 10px rgba(181,232,83,0.1)}
+input[type=text] {
+  width: 40%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #b5e853;
+  background-color: #000000;
+  color: white;
+}
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #000000;
+  border: 3px solid #b5e853;
+  color:#b5e853;
+  padding: 12px 20px;
+  text-decoration: none;
+  margin: 8px 0px;
+  cursor: pointer;
+}
+</style>
+
+<h1>Is this webpage up?</h1>
+<p> Enter the linux ping command for the website you want to test.</p>
+<p> Example: ping -c 1 google.com</p>
+<p>
+  <form action="#" method="post">
+     {% csrf_token %}
+     <input type="text" name='command' >
+     <input type="submit" value="Submit">
+  </form>
+</p>
