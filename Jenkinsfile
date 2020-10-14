@@ -73,8 +73,17 @@ pipeline {
                def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
               }
             }
-          }   
+          }  
         
+   stage('Deploy App to Dockerhub') {
+     
+           steps {
+             script {
+                   docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login'){
+                         app.push("latest")
+              }
+            }
+          }          
         
   }
 }
