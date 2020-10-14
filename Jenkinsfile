@@ -56,7 +56,7 @@ pipeline {
              script {      
               try {
                     sh 'docker save michaelbraunbass/vulnerablewebapp -o vwa.tar' 
-                    sh './shiftleft image-scan -s ./vwa.tar'
+                    sh './shiftleft image-scan -i ./vwa.tar'
               }    catch (Exception e) {
     
                  echo "Request for Approval"  
