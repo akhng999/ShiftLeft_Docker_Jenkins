@@ -48,7 +48,9 @@ pipeline {
              script {      
            
                     app = docker.build("michaelbraunbass/vulnerablewebapp") 
-
+                    app.inside {
+                      sh 'echo $(curl localhost:8080)'
+                    }
         }
       } 
    }
