@@ -74,7 +74,15 @@ pipeline {
               }
             }
           }   
-        
-        
+     stage('Deploy App to Dockerhub') {
+     
+           steps {
+             script {
+                   docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login'){
+                         app.push("latest")
+              }
+            }
+          }              
+     }
   }
 }
