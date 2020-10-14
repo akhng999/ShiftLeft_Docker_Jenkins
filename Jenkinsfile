@@ -64,7 +64,7 @@ pipeline {
             }
       }
     }
-  stage('Code approval request') {
+  stage('Dockerhub Approval Request') {
      
            steps {
              script {
