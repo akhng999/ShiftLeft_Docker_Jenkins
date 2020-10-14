@@ -17,13 +17,13 @@ pipeline {
              }
   
           }
-  stage('Terraform config policy Scan') {    
+  stage('Scan source code before containerizing App') {    
            
             steps {
              script {      
               try {
                     sh 'chmod +x shiftleft' 
-                    sh './shiftleft iac-assessment -r 201981 -p ./'
+                    sh './shiftleft code-scan -s ./'
               }    catch (Exception e) {
     
                  echo "Request for Approval"  
@@ -35,9 +35,44 @@ pipeline {
      
            steps {
              script {
-               def userInput = input(id: 'confirm', message: 'This code contained a rule violation. Would you still like to deploy it?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
+               def userInput = input(id: 'confirm', message: 'This code contains vulnerabilities. Would you still like to continue?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
               }
             }
           }
+ 
+   stage('Build Docker Image') {    
+           
+            steps {
+             script {      
+           
+                    app = docker.build("michaelbraunbass/vulnerablewebapp") 
+
+        }
+      } 
+   }
+  stage('Scan container before pushing to Dockerhub') {    
+           
+            steps {
+             script {      
+              try {
+                    sh 'docker save michaelbraunbass/vulnerablewebapp -o vwa.tar' 
+                    sh './shiftleft image-scan -s ./vwa.tar'
+              }    catch (Exception e) {
+    
+                 echo "Request for Approval"  
+                  }
+            }
+      }
+    }
+  stage('Code approval request') {
+     
+           steps {
+             script {
+               def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
+              }
+            }
+          }   
+        
+        
   }
 }
