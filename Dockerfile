@@ -1,5 +1,5 @@
 #Dockerfile
-FROM python:3.7-buster
+FROM python:3.7-alpine
 
 #Install NGINX
 RUN apt-get update && apt-get install nginx -y --no-install-recommends
