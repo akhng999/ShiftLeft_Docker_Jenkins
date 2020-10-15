@@ -36,7 +36,7 @@ pipeline {
     }
   stage('Code approval request') {
       when{
-            expression { env.flagError == "false" }
+            expression { env.flagError == "true" }
         }
            steps {
              script {
@@ -74,7 +74,7 @@ pipeline {
     }
   stage('Dockerhub Approval Request') {
       when{
-            expression { env.flagError == "false" }
+            expression { env.flagError == "true" }
         }
            steps {
              script {
