@@ -42,6 +42,7 @@ pipeline {
              script {
                def userInput = input(id: 'confirm', message: 'This code contains vulnerabilities. Would you still like to continue?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
               }
+              env.flagError = "false"    
             }
           }
  
