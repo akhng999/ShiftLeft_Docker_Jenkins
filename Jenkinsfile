@@ -28,13 +28,16 @@ pipeline {
                     sh './shiftleft code-scan -s ./'
               }    catch (Exception e) {
     
-                 echo "Request for Approval"  
+                 echo "Security Test Failed" 
+                 env.flagError = "true"  
                   }
             }
       }
     }
   stage('Code approval request') {
-     
+      when{
+            expression { env.flagError == "false" }
+        }
            steps {
              script {
                def userInput = input(id: 'confirm', message: 'This code contains vulnerabilities. Would you still like to continue?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
@@ -63,13 +66,16 @@ pipeline {
                     sh './shiftleft image-scan -i ./vwa.tar -t 1800'
               }    catch (Exception e) {
     
-                 echo "Request for Approval"  
+                 echo "Security Test Failed" 
+                 env.flagError = "true"  
                   }
             }
       }
     }
   stage('Dockerhub Approval Request') {
-     
+      when{
+            expression { env.flagError == "false" }
+        }
            steps {
              script {
                def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
