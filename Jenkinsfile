@@ -54,7 +54,7 @@ pipeline {
            
                     app = docker.build("michaelbraunbass/vulnerablewebapp") 
                     app.inside {
-                    sh 'apt-get update && apt-get install -y curl && curl http://localhost:8080' }
+                    sh 'sudo apt-get update && sudo apt-get install -y curl && curl http://localhost:8080' }
                     }
       } 
    }
