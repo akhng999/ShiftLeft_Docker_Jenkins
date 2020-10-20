@@ -25,7 +25,7 @@ pipeline {
              script {      
               try {
                     sh 'chmod +x shiftleft' 
-                    sh './shiftleft code-scan -s ./'
+                    sh './shiftleft code-scan -s .'
               }    catch (Exception e) {
     
                  echo "Security Test Failed" 
