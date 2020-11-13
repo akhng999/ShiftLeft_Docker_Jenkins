@@ -9,8 +9,8 @@ This document outlines how to implement Shift Left Security into a Jenkins Workf
 ## Prerequisites
 
 [Check Point Cloud Security Posture Management](https://secure.dome9.com/v2/login)<br> 
-[Docker Hub](https://hub.docker.com/)
-[Jenkins](https://www.jenkins.io/)
+[Docker Hub](https://hub.docker.com/)<br>
+[Jenkins](https://www.jenkins.io/)<br>
 
 ## Configure Jenkins Environment
 
@@ -141,3 +141,15 @@ Finally then we can push the container image to Dockerhub:
           }              
      }
 ```
+
+## Reviewing the Pipeline
+
+Open up Blue Ocean and run the pipeline. A completed pipeline will look like this:
+
+![](images/jenkins3.PNG)
+
+
+## Final Thoughts
+
+This is a framework that you can include in your pipeline. It provides guardrails for the developers without interfering with their process.
+
