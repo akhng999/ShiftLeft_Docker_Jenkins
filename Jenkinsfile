@@ -52,7 +52,7 @@ pipeline {
             steps {
              script {      
            
-                    app = docker.build("michaelbraunbass/vulnerablewebapp") 
+                    app = docker.build("akhng999/vulnerablewebapp") 
                   
                     }
       } 
@@ -62,7 +62,7 @@ pipeline {
             steps {
              script {      
               try {
-                    sh 'docker save michaelbraunbass/vulnerablewebapp -o vwa.tar' 
+                    sh 'docker save akhng999/vulnerablewebapp -o vwa.tar' 
                     sh './shiftleft image-scan -i ./vwa.tar -t 1800'
               }    catch (Exception e) {
     
@@ -86,7 +86,7 @@ pipeline {
      
            steps {
              script {
-                   docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login'){
+                   docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                          app.push("latest")
               }
             }
