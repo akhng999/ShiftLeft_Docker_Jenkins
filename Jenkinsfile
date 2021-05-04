@@ -8,90 +8,75 @@ pipeline {
         }
         
   stages {
-          
-         stage('Clone Github repository') {
-            
-    
-           steps {
-              
-             checkout scm
-           
-             }
-  
-          }
-  stage('Scan source code before containerizing App') {    
-           
-            steps {
-             script {      
-              try {
-                    sh 'chmod +x shiftleft' 
-                    sh './shiftleft code-scan -s .'
-              }    catch (Exception e) {
-    
-                 echo "Security Test Failed" 
-                 env.flagError = "true"  
-                  }
-            }
+    stage('Clone Github repository') {
+      steps {
+        checkout scm
       }
     }
-  stage('Code approval request') {
-      when{
-            expression { env.flagError == "true" }
-        }
-           steps {
-             script {
-               def userInput = input(id: 'confirm', message: 'This code contains vulnerabilities. Would you still like to continue?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
-               env.flagError = "false"  
-              }
-                
+    stage('Scan source code before containerizing App') {    
+    
+      steps {
+        script {      
+          try {
+            sh 'chmod +x shiftleft' 
+            sh './shiftleft code-scan -s .'
+          } catch (Exception e) {
+              echo "Security Test Failed" 
+              env.flagError = "true"  
             }
           }
- 
-   stage('Build Docker Image') {    
-           
-            steps {
-             script {      
-           
-                    app = docker.build("akhng999/vulnerablewebapp") 
-                  
-                    }
+      }
+    }
+    stage('Code approval request') {
+      when {
+        expression { env.flagError == "true" }
+      }
+      steps {
+        script {
+        def userInput = input(id: 'confirm', message: 'This code contains vulnerabilities. Would you still like to continue?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
+        env.flagError = "false"  
+        }
+      }
+    }
+    stage('Build Docker Image') {    
+      steps {
+        script {      
+          app = docker.build("akhng999/vulnerablewebapp") 
+        }
       } 
-   }
-  stage('Scan container before pushing to Dockerhub') {    
-           
-            steps {
-             script {      
-              try {
-                    sh 'docker save akhng999/vulnerablewebapp -o vwa.tar' 
-                    sh './shiftleft image-scan -i ./vwa.tar -t 1800'
-              }    catch (Exception e) {
-    
-                 echo "Security Test Failed" 
-                 env.flagError = "true"  
-                  }
-            }
+    }
+    stage('Scan container before pushing to Dockerhub') {    
+      steps {
+        script {      
+          try {
+            sh 'docker save akhng999/vulnerablewebapp -o vwa.tar' 
+            sh './shiftleft image-scan -i ./vwa.tar -t 1800'
+          } catch (Exception e) {
+            echo "Security Test Failed" 
+            env.flagError = "true"  
+          }
+        }
       }
     }
-  stage('Dockerhub Approval Request') {
-      when{
-            expression { env.flagError == "true" }
+    stage('Dockerhub Approval Request') {
+      when {
+        expression { env.flagError == "true" }
+      }
+      steps {
+        script {
+          def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
         }
-           steps {
-             script {
-               def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
-              }
-            }
-          }   
-     stage('Deploy App to Dockerhub') {
-     
-           steps {
-             script {
-                   docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                         app.push("latest")
-              }
-            }
-          }              
-     }
+      }
+    }   
+    stage('Deploy App to Dockerhub') {
+      steps {
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            app.push("latest")
+          }
+        }
+      }              
+    }
   }
 }
 
